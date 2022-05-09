@@ -5,6 +5,9 @@ account_id = ""
 workers_dev = true
 # route = ""
 # zone_id = ""
+kv_namespaces = [ 
+  { binding = "kv",id = "4907f57b024c40409a502d0a1069ed52",preview_id = "4076f33d1cf2430ab0c07aeda0eada67"}
+]
 
 compatibility_date = "2021-11-15"
 compatibility_flags = []

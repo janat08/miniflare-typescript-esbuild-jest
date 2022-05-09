@@ -5,7 +5,7 @@
     "lib": ["esnext"],
     "types": ["@cloudflare/workers-types"],
     "moduleResolution": "node",
-    "strict": true,
+    "strict": false,
     "noEmit": true,
     "esModuleInterop": true,
     "baseUrl": "./",
