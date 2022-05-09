@@ -5,8 +5,9 @@ const head = html`<script
 </script>`
 const title = 'Counter'
 
+//this is a little convoluted, but that's how templating would go in real world app, with dynamic head, title values
+//the head value here is a static constant, but you could pass it down into view to be appended to global head
 export default async function view(todos, responseInit) {
-
   return render({
     content: html`
       <a href='/incomplete'>incomplete only</a>

@@ -1,11 +1,9 @@
 import * as DB from 'worktop/kv';
-import { ulid } from 'worktop/utils';
-import type { ULID } from 'worktop/utils';
-import type { KV } from 'worktop/kv';
 
-
+//kv binding from wrangler.toml isn't global, so it must be passed down
+//it creates a kv store for this worker
 export default function globals(env){
-
+//env.kv isn't a defualt value, I namespaced it so
 const kv = env.kv
 //method of filtering and sorting occurs by key text in KV store, so we can only sort by completed status as it comes first
 //we may also filter by createdAt field, but we have to run two operations guessing completed status if we must
