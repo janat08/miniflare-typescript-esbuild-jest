@@ -13,7 +13,7 @@ export default async function view(todos, responseInit) {
       <a href="/">all items</a>
       <ul>
       ${todos.sort((x, y)=>x.createdAt<y.createdAt).map((x,i) => html`
-        <li>${x.completed}: ${x.val}<a href='/delete/${x.createdAt}'>delete</a> <a href='/complete/${x.createdAt}'>complete</a></li>
+        <li>${x.completed}: ${x.val}<a href='/delete/${x.createdAt}/${x.completed}'>delete</a> <a href='/complete/${x.createdAt}'>complete</a></li>
       `)}
       </ul>
       <form action='/add' method='POST' enctype='multipart/form-data'>

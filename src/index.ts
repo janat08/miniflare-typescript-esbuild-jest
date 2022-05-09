@@ -1,22 +1,17 @@
 
 import { Router} from 'itty-router'
-// import { ThrowableRouter, missing, withParams } from 'itty-router-extras'
 import home from './response'
 import todos from './todos'
-import { withContent, ThrowableRouter, StatusError } from 'itty-router-extras'
 
 const API = Router()
 
 API.get('/', async (event, env, ctx)=>{
-  const {list, find} = todos(env)
-
-  console.log( 'list', await list())
+  const {list} = todos(env)
   return home(await list())
 })
 
 API.get('/incomplete', async (event, env, ctx)=>{
   const {list} = todos(env)
-  console.log(213, await list('false'))
   return home(await list('false'))
 })
 
@@ -43,6 +38,7 @@ API.get('/complete/:createdAt', async (req, env)=>{
   const createdAt = req.params.createdAt
   const {val} = await find(createdAt)
 
+  //since we're changing a key value too, we can't overwrite a record
   await save({createdAt, completed: true, val})
   await destroy({createdAt, completed: false})
   return new Response('', {
@@ -53,11 +49,11 @@ API.get('/complete/:createdAt', async (req, env)=>{
   })
 })
 
-API.get('/delete/:createdAt', async (req, env)=>{
+API.get('/delete/:createdAt/:completed', async (req, env)=>{
   const {destroy} = todos(env)
-  const createdAt = req.params.createdAt
-  await destroy({createdAt, completed: false})
-  await destroy({createdAt, completed: true})
+  const {createdAt, completed} = req.params
+
+  await destroy({createdAt, completed})
   return new Response('', {
     status: 302,
     headers: {
@@ -72,6 +68,3 @@ export default{
     return await API.handle(request,environment,ctx)
   }
 }
-
-
-export { Counter } from "./counter";
