@@ -1,23 +1,23 @@
-export async function handleRequest(request: Request, env: Bindings) {
-  // Match route against pattern /:name/*action
-  const url = new URL(request.url);
-  const match = /\/(?<name>[^/]+)(?<action>.*)/.exec(url.pathname);
-  if (!match?.groups) {
-    // If we didn't specify a name, default to "test"
-    return Response.redirect(`${url.origin}/test/increment`, 302);
-  }
+import { Router } from 'itty-router'
 
-  // Forward the request to the named Durable Object...
-  const { COUNTER } = env;
-  const id = COUNTER.idFromName(match.groups.name);
-  const stub = COUNTER.get(id);
-  // ...removing the name prefix from URL
-  url.pathname = match.groups.action;
-  return stub.fetch(url.toString());
-}
+// now let's create a router (note the lack of "new")
+const router = Router()
 
-const worker: ExportedHandler<Bindings> = { fetch: handleRequest };
+// GET collection index
+router.get('/todos', () => new Response('Todos Index!'))
 
-// Make sure we export the Counter Durable Object class
-export { Counter } from "./counter";
-export default worker;
+// GET item
+router.get('/todos/:id', ({ params }) => new Response(`Todo #${params.id}`))
+
+// POST to the collection (we'll use async here)
+router.post('/todos', async request => {
+  const content = await request.json()
+
+  return new Response('Creating Todo: ' + JSON.stringify(content))
+})
+
+// 404 for everything else
+router.all('*', () => new Response('Not Found.', { status: 404 }))
+
+
+export default {fetch: router.handle}
